@@ -44,7 +44,7 @@ struct TrackedAppsView: View {
         error = nil
         do { state = try manager.add(displayName: newName, limit: .preset(.standard), isCustom: true); newName = "" }
         catch TrackedAppError.duplicateName { error = "Already exists." }
-        catch { error = error.localizedDescription }
+        catch let err { error = err.localizedDescription }
     }
     private func remove(_ id: UUID) throws { state = try manager.remove(id: id) }
     private func applyPreset(_ p: LimitPreset, id: UUID) { if let s = try? manager.updateLimitPreset(id: id, preset: p) { state = s } }
