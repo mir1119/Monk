@@ -1,6 +1,12 @@
 import SwiftUI
 import MonkCore
 
+extension Color {
+    static let monkPrimary = Color(red: 0.42, green: 0.28, blue: 0.92)
+    static let monkPrimaryLight = Color(red: 0.58, green: 0.44, blue: 0.96)
+    static let monkAccent = Color(red: 0.72, green: 0.52, blue: 1.0)
+}
+
 extension Appearance {
     var colorScheme: ColorScheme? {
         switch self {

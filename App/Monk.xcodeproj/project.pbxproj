@@ -11,6 +11,7 @@
 		08F0C3BE93DB60DD8CF206B4 /* DemoState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 711C770B28907ACB0A029CF3 /* DemoState.swift */; };
 		132254A0D32C2252D757A45D /* VariantA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949A07C202F17DD1F204974F /* VariantA.swift */; };
 		1E5A34F5725480F9F5D37BEB /* TrackedAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E791E14E4A2DB58E691C8A9 /* TrackedAppManager.swift */; };
+		232778206C0FD36BE5A3431A /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42180873D57C9F21F153162 /* AppIcons.swift */; };
 		24340FC022CDDC6F06411C9F /* VariantC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6DDAA48B3C18245CC944C4 /* VariantC.swift */; };
 		327F6C737BCF111B293E0A65 /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69462FB48D5421B39EC725E /* UsageTracking.swift */; };
 		370C0EA8E1A34169516AB061 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48FF7F09C2B84C40D5BF9FD /* Onboarding.swift */; };
@@ -77,6 +78,7 @@
 		8A10A6F21CE06F421643D077 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
 		949A07C202F17DD1F204974F /* VariantA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantA.swift; sourceTree = "<group>"; };
 		A3DB21529F5797578EA46593 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A42180873D57C9F21F153162 /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
 		A56F4FE5FBA1B9521D08686E /* VariantB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantB.swift; sourceTree = "<group>"; };
 		B61ED3EE9EBD86DA136001AD /* MonkCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MonkCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C48FF7F09C2B84C40D5BF9FD /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 		750212DD141285234773B62B /* MonkApp */ = {
 			isa = PBXGroup;
 			children = (
+				A42180873D57C9F21F153162 /* AppIcons.swift */,
 				7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */,
 				6F4243C24A17223D516BC769 /* DashboardView.swift */,
 				F1901A02080205E39698B286 /* Info.plist */,
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				232778206C0FD36BE5A3431A /* AppIcons.swift in Sources */,
 				8E4B447990FE2F5FD76DC3DD /* BlockOverlayView.swift in Sources */,
 				F8D55B61F705C92314D93920 /* DashboardView.swift in Sources */,
 				08F0C3BE93DB60DD8CF206B4 /* DemoState.swift in Sources */,

@@ -9,6 +9,7 @@ struct MonkApp: App {
         WindowGroup {
             ContentView(state: $state)
                 .preferredColorScheme(state.appearance.colorScheme)
+                .tint(.monkPrimary)
         }
     }
 }

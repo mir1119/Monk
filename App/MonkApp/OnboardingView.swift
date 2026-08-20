@@ -38,34 +38,58 @@ struct OnboardingView: View {
     }
 
     private var usageStep: some View {
-        VStack {
+        VStack(spacing: 12) {
             Text("How much do you use each app per day?").font(.headline)
-            List {
-                ForEach($draft.inputs, id: \.appName) { $input in
-                    HStack {
-                        Text(input.appName)
-                        Spacer()
-                        TextField("min", value: $input.dailyUsageMinutes, format: .number)
-                            .frame(width: 80).textFieldStyle(.roundedBorder)
-                            .keyboardType(.numberPad)
-                        Text("min")
+            Text("Slide to set your current daily usage — we'll show the yearly cost next.").font(.caption).foregroundStyle(.secondary)
+            ScrollView {
+                VStack(spacing: 14) {
+                    ForEach($draft.inputs, id: \.appName) { $input in
+                        HStack(spacing: 12) {
+                            AppIcon.view(for: input.appName)
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Text(input.appName).font(.subheadline.bold())
+                                    Spacer()
+                                    Text("\(input.dailyUsageMinutes) min/day").font(.caption.bold().monospacedDigit())
+                                        .padding(.horizontal, 8).padding(.vertical, 4)
+                                        .background(Color.orange.opacity(0.14), in: Capsule())
+                                }
+                                Slider(value: Binding(
+                                    get: { Double(input.dailyUsageMinutes) },
+                                    set: { input.dailyUsageMinutes = Int($0) }
+                                ), in: 0...180, step: 5)
+                                .tint(sliderTint(for: input.dailyUsageMinutes))
+                                HStack {
+                                    Text("0m").font(.caption2).foregroundStyle(.secondary)
+                                    Spacer()
+                                    Text("3h").font(.caption2).foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                        .padding(12)
+                        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 14))
                     }
                 }
+                .padding(.vertical, 4)
             }
-            Button("Next") { step = 2 }.buttonStyle(.borderedProminent).disabled(draft.inputs.contains { $0.dailyUsageMinutes < 0 })
+            Button("See yearly cost") { step = 2 }.buttonStyle(.borderedProminent)
         }
     }
 
     private var wastedStep: some View {
         VStack(spacing: 12) {
             Text("Your annualized Wasted Time").font(.headline)
+            Text("vs your chosen Limit — excess × 365").font(.caption).foregroundStyle(.secondary)
             ForEach(draft.wastedTimeReport(), id: \.appName) { entry in
-                HStack {
-                    Text(entry.appName)
+                HStack(spacing: 10) {
+                    AppIcon.view(for: entry.appName)
+                    Text(entry.appName).font(.subheadline)
                     Spacer()
                     Text(entry.isWasting ? String(format: "%.1f h/year", entry.annualizedWastedHours) : "—")
+                        .font(.subheadline.bold().monospacedDigit())
                         .foregroundStyle(entry.isWasting ? .red : .secondary)
                 }
+                .padding(8).background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 10))
             }
             Text(String(format: "Total: %.1f h/year", Double(draft.totalAnnualizedWastedMinutes()) / 60.0))
                 .font(.headline)
@@ -74,17 +98,34 @@ struct OnboardingView: View {
     }
 
     private var limitStep: some View {
-        VStack {
-            Text("Choose a Limit for each app").font(.headline)
-            List {
-                ForEach($draft.inputs, id: \.appName) { $input in
-                    VStack(alignment: .leading) {
-                        Text(input.appName).font(.subheadline.bold())
-                        Picker("Preset", selection: Binding(get: { input.preset ?? .standard }, set: { input.preset = $0; input.customLimit = nil })) {
-                            Text("Light 60/20").tag(LimitPreset.light)
-                            Text("Standard 30/15").tag(LimitPreset.standard)
-                            Text("Strict 15/10").tag(LimitPreset.strict)
-                        }.pickerStyle(.segmented)
+        VStack(spacing: 12) {
+            Text("Choose a daily Limit for each app").font(.headline)
+            Text("Or pick a preset — you can fine-tune per app.").font(.caption).foregroundStyle(.secondary)
+            ScrollView {
+                VStack(spacing: 14) {
+                    ForEach($draft.inputs, id: \.appName) { $input in
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 10) {
+                                AppIcon.view(for: input.appName)
+                                Text(input.appName).font(.subheadline.bold())
+                                Spacer()
+                                Text("\((input.effectiveLimit ?? .preset(.standard)).dailyTotalMinutes) min/day").font(.caption.bold().monospacedDigit())
+                            }
+                            Slider(value: Binding(
+                                get: { Double((input.effectiveLimit ?? .preset(.standard)).dailyTotalMinutes) },
+                                set: { input.customLimit = AppLimit(dailyTotalMinutes: Int($0), singleSessionMinutes: max(5, Int($0/2))) ; input.preset = nil }
+                            ), in: 5...120, step: 5)
+                            .tint(.monkPrimary)
+                            Picker("Preset", selection: Binding(get: { input.preset ?? .standard }, set: { input.preset = $0; input.customLimit = nil })) {
+                                Text("Light 60/20").tag(LimitPreset.light)
+                                Text("Standard 30/15").tag(LimitPreset.standard)
+                                Text("Strict 15/10").tag(LimitPreset.strict)
+                            }.pickerStyle(.segmented)
+                            if input.customLimit != nil {
+                                Text("Custom \(input.customLimit!.dailyTotalMinutes)m / \(input.customLimit!.singleSessionMinutes)m").font(.caption2).foregroundStyle(.secondary)
+                            }
+                        }
+                        .padding(12).background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 14))
                     }
                 }
             }
@@ -96,5 +137,11 @@ struct OnboardingView: View {
             .buttonStyle(.borderedProminent)
             .disabled(!draft.isValid)
         }
+    }
+
+    private func sliderTint(for minutes: Int) -> Color {
+        if minutes >= 90 { return .red }
+        if minutes >= 45 { return .orange }
+        return .monkPrimary
     }
 }

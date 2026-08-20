@@ -84,7 +84,7 @@ struct DashboardView: View {
                         Text("\(today)/\(app.limit.dailyTotalMinutes) min · session \(sess)/\(app.limit.singleSessionMinutes)")
                             .font(.caption).foregroundStyle(.secondary)
                         ProgressView(value: Double(today), total: Double(app.limit.dailyTotalMinutes))
-                            .tint(remaining < 6 ? .orange : .green)
+                            .tint(remaining < 6 ? .orange : .monkPrimary)
                     }
                     Spacer()
                     switch block {
@@ -112,7 +112,7 @@ struct DashboardView: View {
             Text("Last 7 days").font(.headline)
             Chart(calc.last7Days, id: \.date) { d in
                 BarMark(x: .value("day", d.date, unit: .day), y: .value("min", d.minutes))
-                    .foregroundStyle(Color.orange.gradient).cornerRadius(4)
+                    .foregroundStyle(Color.monkPrimary.gradient).cornerRadius(4)
             }.frame(height: 120)
             Text("Local-only · \(MonkStore(fileURL: MonkStore.defaultStoreURL()).privacyCopy)")
                 .font(.caption2).foregroundStyle(.secondary)
