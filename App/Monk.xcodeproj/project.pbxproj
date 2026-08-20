@@ -13,13 +13,13 @@
 		1E5A34F5725480F9F5D37BEB /* TrackedAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E791E14E4A2DB58E691C8A9 /* TrackedAppManager.swift */; };
 		232778206C0FD36BE5A3431A /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42180873D57C9F21F153162 /* AppIcons.swift */; };
 		24340FC022CDDC6F06411C9F /* VariantC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6DDAA48B3C18245CC944C4 /* VariantC.swift */; };
+		2F43251E1F8BC8B8CBB17FAA /* ZeitlyLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EC028B802A9B674020AC07 /* ZeitlyLogo.swift */; };
 		30FC53C4F7FBC8D55BFEBFC6 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689153E0996E105560FB116A /* WelcomeView.swift */; };
 		327F6C737BCF111B293E0A65 /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69462FB48D5421B39EC725E /* UsageTracking.swift */; };
 		370C0EA8E1A34169516AB061 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48FF7F09C2B84C40D5BF9FD /* Onboarding.swift */; };
 		4274C687D8C20DE2E73A60C7 /* MonkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857583F4A7249AD4CB270078 /* MonkStore.swift */; };
 		5BDAC0B6920FD0213BF7760A /* VariantB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F4FE5FBA1B9521D08686E /* VariantB.swift */; };
 		65F5E3938513FF0C89CC8B1E /* MonkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68556655B538DECFC7EECAD3 /* MonkApp.swift */; };
-		7B994E2C47684ECE9EB913D9 /* AurelLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A39829A3546D4E595470B94 /* AurelLogo.swift */; };
 		88647722155C8214EDF6AA4A /* PrototypeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1A853F71EE6B8E6045CE58 /* PrototypeDashboardView.swift */; };
 		8E4B447990FE2F5FD76DC3DD /* BlockOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */; };
 		9722334359BBB3267F5C09B5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C88959A8F589596B81DCFA0 /* OnboardingView.swift */; };
@@ -80,7 +80,6 @@
 		7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockOverlayView.swift; sourceTree = "<group>"; };
 		857583F4A7249AD4CB270078 /* MonkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkStore.swift; sourceTree = "<group>"; };
 		8A10A6F21CE06F421643D077 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
-		8A39829A3546D4E595470B94 /* AurelLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AurelLogo.swift; sourceTree = "<group>"; };
 		949A07C202F17DD1F204974F /* VariantA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantA.swift; sourceTree = "<group>"; };
 		A3DB21529F5797578EA46593 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A42180873D57C9F21F153162 /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
@@ -93,6 +92,7 @@
 		EECFC8BF74A4F89C1E82FF3C /* BlockState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockState.swift; sourceTree = "<group>"; };
 		F0E74F778245365B42B16835 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F1901A02080205E39698B286 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		F1EC028B802A9B674020AC07 /* ZeitlyLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeitlyLogo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				A42180873D57C9F21F153162 /* AppIcons.swift */,
-				8A39829A3546D4E595470B94 /* AurelLogo.swift */,
 				7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */,
 				6F4243C24A17223D516BC769 /* DashboardView.swift */,
 				F1901A02080205E39698B286 /* Info.plist */,
@@ -129,6 +128,7 @@
 				A3DB21529F5797578EA46593 /* Theme.swift */,
 				7B9A9EA092BC6A7761102992 /* TrackedAppsView.swift */,
 				689153E0996E105560FB116A /* WelcomeView.swift */,
+				F1EC028B802A9B674020AC07 /* ZeitlyLogo.swift */,
 				D1D4B2400D392C6ACBE6591C /* Prototype */,
 				738430409C63CDF84049B856 /* Resources */,
 			);
@@ -298,7 +298,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				232778206C0FD36BE5A3431A /* AppIcons.swift in Sources */,
-				7B994E2C47684ECE9EB913D9 /* AurelLogo.swift in Sources */,
 				8E4B447990FE2F5FD76DC3DD /* BlockOverlayView.swift in Sources */,
 				F8D55B61F705C92314D93920 /* DashboardView.swift in Sources */,
 				08F0C3BE93DB60DD8CF206B4 /* DemoState.swift in Sources */,
@@ -313,6 +312,7 @@
 				5BDAC0B6920FD0213BF7760A /* VariantB.swift in Sources */,
 				24340FC022CDDC6F06411C9F /* VariantC.swift in Sources */,
 				30FC53C4F7FBC8D55BFEBFC6 /* WelcomeView.swift in Sources */,
+				2F43251E1F8BC8B8CBB17FAA /* ZeitlyLogo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

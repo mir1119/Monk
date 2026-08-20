@@ -46,9 +46,9 @@ struct DashboardView: View {
                 .padding()
             }
         }
-        .navigationTitle("Aurel")
+        .navigationTitle("Zeitly")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .principal) { HStack(spacing: 8) { AurelMark(size: 22); Text("AUREL").font(.monkMonoBold(size: 14)).tracking(3).foregroundStyle(Color.monkPrimary) } } }
+        .toolbar { ToolbarItem(placement: .principal) { HStack(spacing: 8) { ZeitlyMark(size: 22); Text("ZEITLY").font(.monkMonoBold(size: 14)).tracking(3).foregroundStyle(Color.monkPrimary) } } }
         .onAppear { ticker = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in now = Date() } }
         .onDisappear { ticker?.invalidate() }
     }

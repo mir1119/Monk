@@ -31,7 +31,7 @@ struct OnboardingView: View {
                     }
                     .padding()
                 }
-                .navigationTitle("Aurel")
+                .navigationTitle("Zeitly")
             }
         }
     }
@@ -128,7 +128,7 @@ struct OnboardingView: View {
                     }
                 }
             }
-            Button("Start Aurel") {
+            Button("Start Zeitly") {
                 if let completed = try? OnboardingCompletion.complete(draft: draft, store: store) {
                     state = completed
                 }

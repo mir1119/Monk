@@ -17,7 +17,7 @@ struct SettingsView: View {
                     .font(.caption).foregroundStyle(.secondary)
             }
             Section("About") {
-                Text("Aurel — Free Time over streaks · Hard Block with 1h cooldown")
+                Text("Zeitly — Free Time over streaks · Hard Block with 1h cooldown")
                     .font(.caption).foregroundStyle(.secondary)
             }
         }

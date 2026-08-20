@@ -18,8 +18,8 @@ struct WelcomeView: View {
             VStack(spacing: 18) {
                 Spacer()
                 VStack(spacing: 12) {
-                    AurelMark(size: 64)
-                    Text("WELCOME TO AUREL").font(.monkDisplay(size: 30)).tracking(4).multilineTextAlignment(.center)
+                    ZeitlyMark(size: 64)
+                    Text("WELCOME TO ZEITLY").font(.monkDisplay(size: 30)).tracking(4).multilineTextAlignment(.center)
                     Text("GET YOUR TIME BACK AND BE THE TOP 1%").font(.monkMono(size: 11)).foregroundStyle(.secondary).tracking(1.5).multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
                 }
