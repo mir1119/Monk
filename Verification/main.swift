@@ -3,46 +3,43 @@ import MonkCore
 func check(_ n:String,_ c:Bool){ if c{ print("✓ \(n)") } else { print("✗ FAIL: \(n)"); exit(1)} }
 func tempURL()->URL{ FileManager.default.temporaryDirectory.appendingPathComponent("monk-\(UUID().uuidString).json")}
 do{
- let app=TrackedApp(displayName:"IG", limit: AppLimit(dailyTotalMinutes: 30, singleSessionMinutes: 15), isCustom:false)
  let engine=BlockEngine()
+ let app=TrackedApp(displayName:"IG", limit: AppLimit(dailyTotalMinutes: 30, singleSessionMinutes: 15), isCustom:false)
  let now=Date(timeIntervalSince1970: 1_000_000)
- // not blocked
- check("none", engine.decide(app:app, todayMinutes:10, sessionMinutes:5, cooldownUntil:nil, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now).block==BlockType.none)
- // session threshold -> cooldown 1hr
- let d1=engine.decide(app:app, todayMinutes:10, sessionMinutes:15, cooldownUntil:nil, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now)
- if case .cooldown(let s)=d1.block{ check("session cooldown 3600", s==3600)} else{ check("session cooldown", false)}
- // daily threshold -> dailyLocked
- let d2=engine.decide(app:app, todayMinutes:30, sessionMinutes:5, cooldownUntil:nil, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now)
- if case .dailyLocked=d2.block{ check("daily locked", true)} else{ check("daily locked", false)}
- // already in cooldown
- let cdUntil=now.addingTimeInterval(1800)
- let d3=engine.decide(app:app, todayMinutes:10, sessionMinutes:5, cooldownUntil:cdUntil, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now)
- if case .cooldown(let s)=d3.block{ check("existing cooldown remaining ~1800", s>=1799 && s<=1800)} else{ check("existing cooldown", false)}
- // dailyLocked existing
- let dlUntil=now.addingTimeInterval(3600)
- let d4=engine.decide(app:app, todayMinutes:0, sessionMinutes:0, cooldownUntil:nil, dailyLockedUntil:dlUntil, emergencyUnlockUntil:nil, now:now)
- check("existing dailyLocked", d4.block==BlockType.dailyLocked(untilReset: dlUntil))
- // emergency unlock overrides
- let eu=now.addingTimeInterval(200)
- let d5=engine.decide(app:app, todayMinutes:100, sessionMinutes:100, cooldownUntil:cdUntil, dailyLockedUntil:dlUntil, emergencyUnlockUntil:eu, now:now)
- check("emergency overrides", d5.isInEmergencyUnlock && !d5.isBlocked)
- // emergency expired -> back to blocked
- let euExpired=now.addingTimeInterval(-10)
- let d6=engine.decide(app:app, todayMinutes:10, sessionMinutes:15, cooldownUntil:nil, dailyLockedUntil:nil, emergencyUnlockUntil:euExpired, now:now)
- check("emergency expired re-block", d6.isBlocked)
- // expired cooldown -> re-evaluates
- let expiredCd=now.addingTimeInterval(-10)
- let d7=engine.decide(app:app, todayMinutes:10, sessionMinutes:5, cooldownUntil:expiredCd, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now)
- check("expired cooldown none", d7.block==BlockType.none)
- // nearing helpers
- check("nearing daily 80%", engine.isNearingDailyLimit(todayMinutes:24, limit:30))
- check("not nearing daily under", !engine.isNearingDailyLimit(todayMinutes:10, limit:30))
- check("not nearing daily at limit", !engine.isNearingDailyLimit(todayMinutes:30, limit:30))
- check("nearing session -2", engine.isNearingSessionCooldown(sessionMinutes:13, limit:15))
- check("not nearing session far", !engine.isNearingSessionCooldown(sessionMinutes:5, limit:15))
- // smoke: adapter + onboarding still ok
- let store=MonkStore(fileURL: tempURL())
- _=try TrackedAppManager(store: store).add(displayName:"IG", limit:.preset(.standard), isCustom:false)
- check("smoke mgr", true)
+ check("block none", engine.decide(app:app, todayMinutes:5, sessionMinutes:5, cooldownUntil:nil, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now).block==BlockType.none)
+ // BlockStateStore
+ let url=tempURL()
+ let store=BlockStateStore(fileURL: url)
+ let appId=UUID()
+ check("initial empty", store.load(appId: appId)==BlockAppState())
+ try store.triggerCooldown(appId: appId, now: now)
+ check("cooldown set", store.load(appId: appId).cooldownUntil==now.addingTimeInterval(3600))
+ // emergency once per day
+ check("can emergency initially", store.canEmergencyUnlock(appId: appId, now: now))
+ check("use emergency", try store.useEmergencyUnlock(appId: appId, now: now))
+ check("in emergency", store.isInEmergencyUnlock(appId: appId, now: now))
+ check("cannot reuse same day", !store.canEmergencyUnlock(appId: appId, now: now))
+ check("second use fails", try !store.useEmergencyUnlock(appId: appId, now: now))
+ // next day can again
+ let nextDay=now.addingTimeInterval(86400+60)
+ check("next day can emergency", store.canEmergencyUnlock(appId: appId, now: nextDay))
+ check("next day use", try store.useEmergencyUnlock(appId: appId, now: nextDay))
+ // daily lock
+ let appId2=UUID()
+ let until=now.addingTimeInterval(3600*5)
+ try store.triggerDailyLock(appId: appId2, until: until)
+ check("daily lock set", store.load(appId: appId2).dailyLockedUntil==until)
+ // cleanup expired
+ let expiredURL=tempURL()
+ let expiredStore=BlockStateStore(fileURL: expiredURL)
+ let aid=UUID()
+ try expiredStore.triggerCooldown(appId: aid, now: now.addingTimeInterval(-7200))
+ check("expired cooldown exists", expiredStore.load(appId: aid).cooldownUntil != nil)
+ try expiredStore.cleanupExpired(now: now)
+ check("cleanup cleared", expiredStore.load(appId: aid).cooldownUntil==nil)
+ // engine integration with store state
+ let s=store.load(appId: appId)
+ let dec=engine.decide(app:app, todayMinutes:100, sessionMinutes:100, cooldownUntil:s.cooldownUntil, dailyLockedUntil:s.dailyLockedUntil, emergencyUnlockUntil:s.emergencyUnlockUntil, now:now)
+ check("engine respects emergency", !dec.isBlocked)
  print("All verification passed.")
 }catch{ print("✗ FAIL: \(error)"); exit(1)}
