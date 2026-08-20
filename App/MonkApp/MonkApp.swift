@@ -20,24 +20,9 @@ struct ContentView: View {
             if state.hasCompletedOnboarding {
                 DashboardPlaceholder(state: state)
             } else {
-                OnboardingPlaceholder()
+                OnboardingView(state: $state)
             }
         }
-    }
-}
-
-struct OnboardingPlaceholder: View {
-    var body: some View {
-        VStack(spacing: 16) {
-            Text("Monk Mode").font(.largeTitle.bold())
-            Text("Live like a monk — reduce dopamine intake and reclaim Free Time.")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.secondary)
-            Text("Local-only. \(MonkStore(fileURL: MonkStore.defaultStoreURL()).privacyCopy)")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
     }
 }
 
