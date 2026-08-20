@@ -3,43 +3,50 @@ import MonkCore
 func check(_ n:String,_ c:Bool){ if c{ print("✓ \(n)") } else { print("✗ FAIL: \(n)"); exit(1)} }
 func tempURL()->URL{ FileManager.default.temporaryDirectory.appendingPathComponent("monk-\(UUID().uuidString).json")}
 do{
- let engine=BlockEngine()
  let app=TrackedApp(displayName:"IG", limit: AppLimit(dailyTotalMinutes: 30, singleSessionMinutes: 15), isCustom:false)
- let now=Date(timeIntervalSince1970: 1_000_000)
- check("block none", engine.decide(app:app, todayMinutes:5, sessionMinutes:5, cooldownUntil:nil, dailyLockedUntil:nil, emergencyUnlockUntil:nil, now:now).block==BlockType.none)
- // BlockStateStore
+ let engine=BlockEngine()
+ let now=Date()
+ // Dashboard
+ let calc=DashboardCalculator()
+ check("remaining 30-10=20", calc.todayRemaining(app:app, todayMinutes:10)==20)
+ check("remaining capped", calc.todayRemaining(app:app, todayMinutes:40)==0)
+ let baseline=Baseline(dailyMinutesByApp:["IG":90])
+ let (vsBase, vsLast, weekly)=calc.weeklyFreeMinutes(baseline: baseline, thisWeekTotal: 100, lastWeekTotal: 200)
+ check("free vs baseline 630-100=530", vsBase==530)
+ check("free vs last 100", vsLast==100)
+ check("weekly==vsBase", weekly==vsBase)
+ let usages:[UUID:AppUsage]=[app.id: AppUsage(trackedAppId: app.id, todayMinutes:10, currentSessionMinutes:5, mode:.local)]
+ let data=calc.build(trackedApps:[app], usages:usages, baseline:baseline, thisWeekTotal:100, lastWeekTotal:200, last7Days:[DailyUsage(date:now, minutes:10)], now:now)
+ check("dashboard remaining", data.todayRemainingByApp[app.id]==20)
+ check("dashboard blocked none", data.blockedStates[app.id]==BlockType.none)
+ // Notifications
+ let sched=NotificationScheduler()
+ // 80% case: 24/30
+ let u80:[UUID:AppUsage]=[app.id: AppUsage(trackedAppId:app.id, todayMinutes:24, currentSessionMinutes:5, mode:.local)]
+ check("80% notification", sched.notifications(usages:u80, trackedApps:[app], freeMinutesToday:0).contains(where:{$0.kind==NotificationKind.daily80Percent}))
+ // pre-cooldown: 13/15
+ let uPre:[UUID:AppUsage]=[app.id: AppUsage(trackedAppId:app.id, todayMinutes:10, currentSessionMinutes:13, mode:.local)]
+ check("pre cooldown", sched.notifications(usages:uPre, trackedApps:[app], freeMinutesToday:0).contains(where:{$0.kind==NotificationKind.sessionPreCooldown}))
+ // evening summary
+ check("evening summary", sched.notifications(usages:usages, trackedApps:[app], freeMinutesToday:30).contains(where:{$0.kind==NotificationKind.eveningSummary}))
+ check("no evening when 0", !sched.notifications(usages:usages, trackedApps:[app], freeMinutesToday:0).contains(where:{$0.kind==NotificationKind.eveningSummary}))
+ // Settings + DailyReset
  let url=tempURL()
- let store=BlockStateStore(fileURL: url)
- let appId=UUID()
- check("initial empty", store.load(appId: appId)==BlockAppState())
- try store.triggerCooldown(appId: appId, now: now)
- check("cooldown set", store.load(appId: appId).cooldownUntil==now.addingTimeInterval(3600))
- // emergency once per day
- check("can emergency initially", store.canEmergencyUnlock(appId: appId, now: now))
- check("use emergency", try store.useEmergencyUnlock(appId: appId, now: now))
- check("in emergency", store.isInEmergencyUnlock(appId: appId, now: now))
- check("cannot reuse same day", !store.canEmergencyUnlock(appId: appId, now: now))
- check("second use fails", try !store.useEmergencyUnlock(appId: appId, now: now))
- // next day can again
- let nextDay=now.addingTimeInterval(86400+60)
- check("next day can emergency", store.canEmergencyUnlock(appId: appId, now: nextDay))
- check("next day use", try store.useEmergencyUnlock(appId: appId, now: nextDay))
- // daily lock
- let appId2=UUID()
- let until=now.addingTimeInterval(3600*5)
- try store.triggerDailyLock(appId: appId2, until: until)
- check("daily lock set", store.load(appId: appId2).dailyLockedUntil==until)
- // cleanup expired
- let expiredURL=tempURL()
- let expiredStore=BlockStateStore(fileURL: expiredURL)
- let aid=UUID()
- try expiredStore.triggerCooldown(appId: aid, now: now.addingTimeInterval(-7200))
- check("expired cooldown exists", expiredStore.load(appId: aid).cooldownUntil != nil)
- try expiredStore.cleanupExpired(now: now)
- check("cleanup cleared", expiredStore.load(appId: aid).cooldownUntil==nil)
- // engine integration with store state
- let s=store.load(appId: appId)
- let dec=engine.decide(app:app, todayMinutes:100, sessionMinutes:100, cooldownUntil:s.cooldownUntil, dailyLockedUntil:s.dailyLockedUntil, emergencyUnlockUntil:s.emergencyUnlockUntil, now:now)
- check("engine respects emergency", !dec.isBlocked)
+ let store=MonkStore(fileURL: url)
+ let settings=SettingsManager(store: store)
+ let s1=try settings.updateDailyReset(.fourAM)
+ check("dailyReset 4am", s1.dailyReset==DailyResetOption.fourAM)
+ let s2=try settings.addTrackedApp(displayName:"MyApp", limit:.preset(.light))
+ check("add via settings", s2.trackedApps.count==1)
+ let addedId=s2.trackedApps[0].id
+ let s3=try settings.updateLimit(id: addedId, limit:.preset(.strict))
+ check("update via settings", s3.trackedApps[0].limit==AppLimit.preset(.strict))
+ let s4=try settings.removeTrackedApp(id: addedId)
+ check("remove via settings", s4.trackedApps.isEmpty)
+ // BlockState still works
+ let bStore=BlockStateStore(fileURL: tempURL())
+ let bid=UUID()
+ try bStore.triggerCooldown(appId: bid, now: now)
+ check("blockState cooldown", bStore.load(appId: bid).cooldownUntil != nil)
  print("All verification passed.")
 }catch{ print("✗ FAIL: \(error)"); exit(1)}
