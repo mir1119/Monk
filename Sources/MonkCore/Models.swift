@@ -80,22 +80,31 @@ public struct Baseline: Codable, Sendable, Equatable {
     }
 }
 
+public enum Appearance: String, Codable, Sendable, CaseIterable {
+    case system
+    case light
+    case dark
+}
+
 public struct MonkState: Codable, Sendable, Equatable {
     public var trackedApps: [TrackedApp]
     public var baseline: Baseline?
     public var dailyReset: DailyResetOption
     public var hasCompletedOnboarding: Bool
+    public var appearance: Appearance
 
     public init(
         trackedApps: [TrackedApp] = [],
         baseline: Baseline? = nil,
         dailyReset: DailyResetOption = .midnight,
-        hasCompletedOnboarding: Bool = false
+        hasCompletedOnboarding: Bool = false,
+        appearance: Appearance = .system
     ) {
         self.trackedApps = trackedApps
         self.baseline = baseline
         self.dailyReset = dailyReset
         self.hasCompletedOnboarding = hasCompletedOnboarding
+        self.appearance = appearance
     }
 
     public static let defaultTrackedAppNames = ["Instagram", "TikTok", "X", "Threads", "YouTube Shorts", "Reddit", "Facebook"]

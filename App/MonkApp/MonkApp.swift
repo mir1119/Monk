@@ -8,6 +8,7 @@ struct MonkApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(state: $state)
+                .preferredColorScheme(state.appearance.colorScheme)
         }
     }
 }
@@ -28,9 +29,16 @@ struct ContentView: View {
             .tabItem { Label("Monk", systemImage: "house.fill") }.tag(0)
 
             NavigationStack {
+                SettingsView(state: $state)
+            }
+            .tabItem { Label("Settings", systemImage: "gearshape") }.tag(1)
+
+            #if DEBUG
+            NavigationStack {
                 PrototypeDashboardView()
             }
-            .tabItem { Label("Prototype", systemImage: "sparkles.rectangle.stack") }.tag(1)
+            .tabItem { Label("Prototype", systemImage: "sparkles.rectangle.stack") }.tag(2)
+            #endif
         }
     }
 }
