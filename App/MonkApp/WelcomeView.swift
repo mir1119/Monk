@@ -17,8 +17,9 @@ struct WelcomeView: View {
             }.ignoresSafeArea().opacity(0.4)
             VStack(spacing: 18) {
                 Spacer()
-                VStack(spacing: 10) {
-                    Text("WELCOME TO MONK").font(.monkDisplay(size: 28)).tracking(3).multilineTextAlignment(.center)
+                VStack(spacing: 12) {
+                    AurelMark(size: 64)
+                    Text("WELCOME TO AUREL").font(.monkDisplay(size: 30)).tracking(4).multilineTextAlignment(.center)
                     Text("GET YOUR TIME BACK AND BE THE TOP 1%").font(.monkMono(size: 11)).foregroundStyle(.secondary).tracking(1.5).multilineTextAlignment(.center)
                         .padding(.horizontal, 24)
                 }

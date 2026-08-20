@@ -28,7 +28,7 @@ struct ContentView: View {
                     OnboardingView(state: $state)
                 }
             }
-            .tabItem { Label("Monk", systemImage: "house.fill") }.tag(0)
+            .tabItem { Label("Aurel", systemImage: "house.fill") }.tag(0)
 
             NavigationStack {
                 SettingsView(state: $state)

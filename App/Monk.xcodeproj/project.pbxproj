@@ -19,6 +19,7 @@
 		4274C687D8C20DE2E73A60C7 /* MonkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857583F4A7249AD4CB270078 /* MonkStore.swift */; };
 		5BDAC0B6920FD0213BF7760A /* VariantB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A56F4FE5FBA1B9521D08686E /* VariantB.swift */; };
 		65F5E3938513FF0C89CC8B1E /* MonkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68556655B538DECFC7EECAD3 /* MonkApp.swift */; };
+		7B994E2C47684ECE9EB913D9 /* AurelLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A39829A3546D4E595470B94 /* AurelLogo.swift */; };
 		88647722155C8214EDF6AA4A /* PrototypeDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F1A853F71EE6B8E6045CE58 /* PrototypeDashboardView.swift */; };
 		8E4B447990FE2F5FD76DC3DD /* BlockOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */; };
 		9722334359BBB3267F5C09B5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C88959A8F589596B81DCFA0 /* OnboardingView.swift */; };
@@ -79,6 +80,7 @@
 		7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockOverlayView.swift; sourceTree = "<group>"; };
 		857583F4A7249AD4CB270078 /* MonkStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkStore.swift; sourceTree = "<group>"; };
 		8A10A6F21CE06F421643D077 /* Dashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dashboard.swift; sourceTree = "<group>"; };
+		8A39829A3546D4E595470B94 /* AurelLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AurelLogo.swift; sourceTree = "<group>"; };
 		949A07C202F17DD1F204974F /* VariantA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantA.swift; sourceTree = "<group>"; };
 		A3DB21529F5797578EA46593 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A42180873D57C9F21F153162 /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				A42180873D57C9F21F153162 /* AppIcons.swift */,
+				8A39829A3546D4E595470B94 /* AurelLogo.swift */,
 				7D07AC94EC6D5FABF60260CD /* BlockOverlayView.swift */,
 				6F4243C24A17223D516BC769 /* DashboardView.swift */,
 				F1901A02080205E39698B286 /* Info.plist */,
@@ -295,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				232778206C0FD36BE5A3431A /* AppIcons.swift in Sources */,
+				7B994E2C47684ECE9EB913D9 /* AurelLogo.swift in Sources */,
 				8E4B447990FE2F5FD76DC3DD /* BlockOverlayView.swift in Sources */,
 				F8D55B61F705C92314D93920 /* DashboardView.swift in Sources */,
 				08F0C3BE93DB60DD8CF206B4 /* DemoState.swift in Sources */,

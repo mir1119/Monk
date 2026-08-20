@@ -46,9 +46,9 @@ struct DashboardView: View {
                 .padding()
             }
         }
-        .navigationTitle("Monk")
+        .navigationTitle("Aurel")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { ToolbarItem(placement: .principal) { Text("MONK").font(.monkMonoBold(size: 14)).tracking(3).foregroundStyle(Color(red: 0.42, green: 0.28, blue: 0.92)) } }
+        .toolbar { ToolbarItem(placement: .principal) { HStack(spacing: 8) { AurelMark(size: 22); Text("AUREL").font(.monkMonoBold(size: 14)).tracking(3).foregroundStyle(Color.monkPrimary) } } }
         .onAppear { ticker = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in now = Date() } }
         .onDisappear { ticker?.invalidate() }
     }
@@ -70,13 +70,13 @@ struct DashboardView: View {
         let vsBase = calc.freeVsBaseline
         let vsLast = calc.freeVsLastWeek
         return VStack(spacing: 10) {
-            Text("FREE TIME // THIS WEEK").font(.monkMono(size: 10)).foregroundStyle(.secondary).tracking(2)
+            Text("FREE TIME // THIS WEEK").font(.monkMono(size: 11)).foregroundStyle(.secondary).tracking(2)
             Text(String(format: "%02d:%02d", free/60, free%60))
-                .font(.monkDisplay(size: 52))
+                .font(.monkDisplay(size: 56))
             Rectangle().fill(Color.monkHairline).frame(height: 1).padding(.horizontal, 24)
             HStack(spacing: 16) {
-                Label("BASELINE +\(vsBase) MIN", systemImage: "arrow.up.right").font(.monkMono(size: 10))
-                Label("LAST WK +\(vsLast) MIN", systemImage: "arrow.up.forward").font(.monkMono(size: 10))
+                Label("BASELINE +\(vsBase) MIN", systemImage: "arrow.up.right").font(.monkMono(size: 11))
+                Label("LAST WK +\(vsLast) MIN", systemImage: "arrow.up.forward").font(.monkMono(size: 11))
             }
             .foregroundStyle(.secondary)
         }
@@ -88,7 +88,7 @@ struct DashboardView: View {
 
     private var appsList: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("TODAY // TRACKED").font(.monkMono(size: 11)).foregroundStyle(.secondary).tracking(1.5)
+            Text("TODAY // TRACKED").font(.monkMono(size: 12)).foregroundStyle(.secondary).tracking(1.5)
             ForEach(state.trackedApps) { app in
                 let usage = demoUsages[app.id]
                 let today = usage?.todayMinutes ?? 0
@@ -97,9 +97,9 @@ struct DashboardView: View {
                 let block = calc.blockedStates[app.id] ?? .none
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(app.displayName.uppercased()).font(.monkMonoBold(size: 13)).tracking(0.5)
+                        Text(app.displayName.uppercased()).font(.monkMonoBold(size: 14)).tracking(0.5)
                         Text("\(today)/\(app.limit.dailyTotalMinutes) MIN · SESSION \(sess)/\(app.limit.singleSessionMinutes)")
-                            .font(.monkMono(size: 10)).foregroundStyle(.secondary)
+                            .font(.monkMono(size: 11)).foregroundStyle(.secondary)
                         ProgressView(value: Double(today), total: Double(app.limit.dailyTotalMinutes))
                             .tint(remaining < 6 ? .orange : .monkPrimary)
                     }

@@ -31,15 +31,15 @@ struct OnboardingView: View {
                     }
                     .padding()
                 }
-                .navigationTitle("Monk Mode")
+                .navigationTitle("Aurel")
             }
         }
     }
 
     private var usageStep: some View {
         VStack(spacing: 12) {
-            Text("DAILY USAGE // PER APP").font(.monkMonoBold(size: 13)).tracking(1)
-            Text("SLIDE TO SET CURRENT DAILY USAGE").font(.monkMono(size: 9)).foregroundStyle(.secondary).tracking(1)
+            Text("DAILY USAGE // PER APP").font(.monkMonoBold(size: 14)).tracking(1)
+            Text("SLIDE TO SET CURRENT DAILY USAGE").font(.monkMono(size: 10)).foregroundStyle(.secondary).tracking(1)
             ScrollView {
                 VStack(spacing: 14) {
                     ForEach($draft.inputs, id: \.appName) { $input in
@@ -77,8 +77,8 @@ struct OnboardingView: View {
 
     private var wastedStep: some View {
         VStack(spacing: 12) {
-            Text("ANNUALIZED WASTED TIME").font(.monkMonoBold(size: 13)).tracking(1)
-            Text("VS CHOSEN LIMIT — EXCESS × 365").font(.monkMono(size: 9)).foregroundStyle(.secondary).tracking(1)
+            Text("ANNUALIZED WASTED TIME").font(.monkMonoBold(size: 14)).tracking(1)
+            Text("VS CHOSEN LIMIT — EXCESS × 365").font(.monkMono(size: 10)).foregroundStyle(.secondary).tracking(1)
             ForEach(draft.wastedTimeReport(), id: \.appName) { entry in
                 HStack(spacing: 10) {
                     AppIcon.view(for: entry.appName)
@@ -98,8 +98,8 @@ struct OnboardingView: View {
 
     private var limitStep: some View {
         VStack(spacing: 12) {
-            Text("DAILY LIMIT // PER APP").font(.monkMonoBold(size: 13)).tracking(1)
-            Text("PICK A PRESET OR FINE-TUNE PER APP").font(.monkMono(size: 9)).foregroundStyle(.secondary).tracking(1)
+            Text("DAILY LIMIT // PER APP").font(.monkMonoBold(size: 14)).tracking(1)
+            Text("PICK A PRESET OR FINE-TUNE PER APP").font(.monkMono(size: 10)).foregroundStyle(.secondary).tracking(1)
             ScrollView {
                 VStack(spacing: 14) {
                     ForEach($draft.inputs, id: \.appName) { $input in
@@ -128,7 +128,7 @@ struct OnboardingView: View {
                     }
                 }
             }
-            Button("Start Monk Mode") {
+            Button("Start Aurel") {
                 if let completed = try? OnboardingCompletion.complete(draft: draft, store: store) {
                     state = completed
                 }

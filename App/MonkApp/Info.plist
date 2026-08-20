@@ -5,9 +5,11 @@
     <key>CFBundleExecutable</key>
     <string>MonkApp</string>
     <key>CFBundleIdentifier</key>
-    <string>com.monk.app</string>
+    <string>com.aurel.app</string>
     <key>CFBundleName</key>
-    <string>Monk</string>
+    <string>Aurel</string>
+    <key>CFBundleDisplayName</key>
+    <string>AUREL</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
