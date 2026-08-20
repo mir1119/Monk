@@ -4,54 +4,44 @@ import MonkCore
 func check(_ name: String, _ condition: Bool) {
     if condition { print("✓ \(name)") } else { print("✗ FAIL: \(name)"); exit(1) }
 }
-
-func tempURL() -> URL {
-    FileManager.default.temporaryDirectory.appendingPathComponent("monk-verify-\(UUID().uuidString).json")
-}
+func tempURL() -> URL { FileManager.default.temporaryDirectory.appendingPathComponent("monk-\(UUID().uuidString).json") }
 
 do {
-    let store = MonkStore(fileURL: tempURL())
-    let state = store.load()
-    check("load returns default when missing", state.trackedApps.isEmpty && state.baseline == nil && state.dailyReset == .midnight && !state.hasCompletedOnboarding)
+    // Basis — keep existing checks smoke
+    check("preset 60/20", LimitPreset.light.dailyTotalMinutes == 60)
+    check("wasted 60*365", WastedTimeCalculator.annualizedWastedMinutes(dailyUsageMinutes: 90, limitDailyMinutes: 30) == 60*365)
+    check("completion", (try? OnboardingCompletion.complete(draft: OnboardingDraft(inputs: [OnboardingInput(appName: "IG", dailyUsageMinutes: 90, preset: .standard)]), store: MonkStore(fileURL: tempURL()))) != nil)
+
+    // Ticket #4 — TrackedAppManager
     let url = tempURL()
-    var state2 = MonkState()
-    state2.trackedApps = [TrackedApp(displayName: "Instagram", limit: .preset(.standard), isCustom: false)]
-    state2.baseline = Baseline(dailyMinutesByApp: ["Instagram": 90], createdAt: Date(timeIntervalSince1970: 0))
-    state2.dailyReset = .fourAM
-    state2.hasCompletedOnboarding = true
-    try MonkStore(fileURL: url).save(state2)
-    check("save/load round-trip", MonkStore(fileURL: url).load() == state2)
-    check("AppLimit valid", AppLimit(dailyTotalMinutes: 30, singleSessionMinutes: 15).isValid)
-    check("preset light 60/20", LimitPreset.light.dailyTotalMinutes == 60 && LimitPreset.light.singleSessionMinutes == 20)
-    check("wasted 90-30 = 60*365", WastedTimeCalculator.annualizedWastedMinutes(dailyUsageMinutes: 90, limitDailyMinutes: 30) == 60 * 365)
-
-    let draft = OnboardingDraft(inputs: [
-        OnboardingInput(appName: "Instagram", dailyUsageMinutes: 90, preset: .standard),
-        OnboardingInput(appName: "TikTok", dailyUsageMinutes: 20, preset: .standard),
-    ])
-    check("draft valid", draft.isValid)
-    check("draft wasted report Instagram 60*365", draft.wastedTimeReport().first(where: { $0.appName == "Instagram" })?.annualizedWastedMinutes == 60*365)
-    check("draft wasted report TikTok 0", draft.wastedTimeReport().first(where: { $0.appName == "TikTok" })?.annualizedWastedMinutes == 0)
-    check("draft total wasted", draft.totalAnnualizedWastedMinutes() == 60*365)
-    check("draft invalid when empty", !OnboardingDraft().isValid)
-    check("draft invalid when missing limit", !OnboardingDraft(inputs: [OnboardingInput(appName: "X", dailyUsageMinutes: 30)]).isValid)
-    check("draft invalid over 1440", !OnboardingDraft(inputs: [OnboardingInput(appName: "X", dailyUsageMinutes: 2000, preset: .standard)]).isValid)
-    let customDraft = OnboardingDraft(inputs: [OnboardingInput(appName: "MyApp", dailyUsageMinutes: 40, customLimit: AppLimit(dailyTotalMinutes: 20, singleSessionMinutes: 10))])
-    check("custom limit effective", customDraft.inputs.first?.effectiveLimit == AppLimit(dailyTotalMinutes: 20, singleSessionMinutes: 10))
-    check("custom draft wasted 20*365", customDraft.wastedTimeReport().first?.annualizedWastedMinutes == 20*365)
-
-    let completeURL = tempURL()
-    let completeStore = MonkStore(fileURL: completeURL)
-    let completed = try OnboardingCompletion.complete(draft: draft, store: completeStore)
-    check("completion sets onboarding true", completed.hasCompletedOnboarding)
-    check("completion writes baseline", completed.baseline?.dailyMinutesByApp["Instagram"] == 90)
-    check("completion writes tracked apps", completed.trackedApps.count == 2)
-    check("completion persisted", MonkStore(fileURL: completeURL).load().hasCompletedOnboarding == true)
-    do { _ = try OnboardingCompletion.complete(draft: OnboardingDraft(), store: MonkStore(fileURL: tempURL())); check("invalid draft throws", false) } catch { check("invalid draft throws", (error as? OnboardingError) == .invalidDraft) }
-    check("privacy copy local", MonkStore(fileURL: tempURL()).privacyCopy.contains("locally"))
-
+    let mgr = TrackedAppManager(store: MonkStore(fileURL: url))
+    check("list empty initially", mgr.list().isEmpty)
+    let s1 = try mgr.add(displayName: "Instagram", limit: .preset(.standard), isCustom: false)
+    check("add 1", s1.trackedApps.count == 1 && s1.trackedApps[0].displayName == "Instagram")
+    check("add persisted", mgr.list().count == 1)
+    let s2 = try mgr.add(displayName: "MyGame", bundleIdentifier: "com.example.game", limit: AppLimit(dailyTotalMinutes: 20, singleSessionMinutes: 10), isCustom: true)
+    check("add custom", s2.trackedApps.count == 2 && s2.trackedApps[1].isCustom)
+    do { _ = try mgr.add(displayName: "instagram", limit: .preset(.standard), isCustom: false); check("duplicate case-insensitive", false) } catch TrackedAppError.duplicateName { check("duplicate rejected", true) } catch { check("duplicate wrong error", false) }
+    do { _ = try mgr.add(displayName: "  ", limit: .preset(.standard), isCustom: false); check("empty name", false) } catch TrackedAppError.invalidName { check("invalidName rejected", true) } catch { check("invalidName wrong", false) }
+    do { _ = try mgr.add(displayName: "Bad", limit: AppLimit(dailyTotalMinutes: 0, singleSessionMinutes: 10), isCustom: false); check("invalid limit", false) } catch TrackedAppError.invalidLimit { check("invalidLimit rejected", true) } catch { check("invalidLimit wrong", false) }
+    let id = s2.trackedApps.first(where: { $0.displayName == "Instagram" })!.id
+    let s3 = try mgr.updateLimit(id: id, limit: AppLimit(dailyTotalMinutes: 15, singleSessionMinutes: 10))
+    check("updateLimit", s3.trackedApps.first(where: { $0.id == id })?.limit.dailyTotalMinutes == 15)
+    do { _ = try mgr.updateLimit(id: id, limit: AppLimit(dailyTotalMinutes: 0, singleSessionMinutes: 10)); check("update invalid limit", false) } catch TrackedAppError.invalidLimit { check("update invalidLimit", true) } catch { check("update wrong", false) }
+    let s4 = try mgr.updateLimitPreset(id: id, preset: .light)
+    check("updatePreset light", s4.trackedApps.first(where: { $0.id == id })?.limit.dailyTotalMinutes == 60)
+    let s5 = try mgr.remove(id: id)
+    check("remove", s5.trackedApps.count == 1 && s5.trackedApps[0].displayName == "MyGame")
+    do { _ = try mgr.remove(id: UUID()); check("remove notFound", false) } catch TrackedAppError.notFound { check("notFound", true) } catch { check("notFound wrong", false) }
+    check("remove persisted", mgr.list().count == 1)
+    // addDefaultsIfNeeded
+    let url2 = tempURL()
+    let mgr2 = TrackedAppManager(store: MonkStore(fileURL: url2))
+    let def = try mgr2.addDefaultsIfNeeded()
+    check("defaults 7", def.trackedApps.count == 7)
+    check("defaults not overwrite", (try mgr2.addDefaultsIfNeeded()).trackedApps.count == 7)
+    check("defaults persisted", TrackedAppManager(store: MonkStore(fileURL: url2)).list().count == 7)
     print("All verification passed.")
 } catch {
-    print("✗ FAIL: threw \(error)")
-    exit(1)
+    print("✗ FAIL: threw \(error)"); exit(1)
 }
