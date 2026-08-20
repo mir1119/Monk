@@ -14,38 +14,23 @@ struct MonkApp: App {
 
 struct ContentView: View {
     @Binding var state: MonkState
+    @State private var selection = 0
 
     var body: some View {
-        NavigationStack {
-            if state.hasCompletedOnboarding {
-                DashboardPlaceholder(state: state)
-            } else {
-                OnboardingView(state: $state)
-            }
-        }
-    }
-}
-
-struct DashboardPlaceholder: View {
-    let state: MonkState
-    var body: some View {
-        List {
-            Section("Tracked Apps") {
-                ForEach(state.trackedApps) { app in
-                    HStack {
-                        Text(app.displayName)
-                        Spacer()
-                        Text("\(app.limit.dailyTotalMinutes)m / \(app.limit.singleSessionMinutes)m")
-                            .foregroundStyle(.secondary)
-                    }
+        TabView(selection: $selection) {
+            NavigationStack {
+                if state.hasCompletedOnboarding {
+                    DashboardView(state: $state)
+                } else {
+                    OnboardingView(state: $state)
                 }
             }
-            Section("Privacy") {
-                Text(MonkStore(fileURL: MonkStore.defaultStoreURL()).privacyCopy)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+            .tabItem { Label("Monk", systemImage: "house.fill") }.tag(0)
+
+            NavigationStack {
+                PrototypeDashboardView()
             }
+            .tabItem { Label("Prototype", systemImage: "sparkles.rectangle.stack") }.tag(1)
         }
-        .navigationTitle("Monk")
     }
 }
