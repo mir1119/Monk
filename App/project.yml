@@ -1,0 +1,13 @@
+name: Monk
+targets:
+  MonkApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [MonkApp]
+    settings:
+      base:
+        SWIFT_VERSION: "5.0"
+        INFOPLIST_FILE: MonkApp/Info.plist
+    dependencies:
+      - target: MonkCore
