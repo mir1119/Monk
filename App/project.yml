@@ -1,5 +1,18 @@
 name: Monk
+options:
+  bundleIdPrefix: com.monk
+  xcodeVersion: "15.0"
+  generateEmptyDirectories: true
 targets:
+  MonkCore:
+    type: framework
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources: [../Sources/MonkCore]
+    settings:
+      base:
+        SWIFT_VERSION: "5.0"
+        GENERATE_INFOPLIST_FILE: YES
   MonkApp:
     type: application
     platform: iOS
@@ -9,5 +22,6 @@ targets:
       base:
         SWIFT_VERSION: "5.0"
         INFOPLIST_FILE: MonkApp/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
     dependencies:
       - target: MonkCore
