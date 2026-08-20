@@ -20,7 +20,7 @@
     <string>LaunchScreen</string>
     <key>UIAppFonts</key>
     <array>
-        <string>Resources/Fonts/Inconsolata.ttf</string>
+        <string>Inconsolata.ttf</string>
     </array>
     <key>UIApplicationSceneManifest</key>
     <dict>
