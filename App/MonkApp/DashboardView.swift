@@ -33,8 +33,9 @@ struct DashboardView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemGroupedBackground).ignoresSafeArea()
+            Color(.systemBackground).ignoresSafeArea()
             gridBackground
+            ParticleField().ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 18) {
                     hero

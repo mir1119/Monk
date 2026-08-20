@@ -10,6 +10,7 @@ struct MonkApp: App {
             ContentView(state: $state)
                 .preferredColorScheme(state.appearance.colorScheme)
                 .tint(.monkPrimary)
+                .environment(\.font, Font.monkMono(size: 13))
         }
     }
 }

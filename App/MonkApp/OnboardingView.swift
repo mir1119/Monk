@@ -13,16 +13,20 @@ struct OnboardingView: View {
     }
 
     var body: some View {
-        VStack {
-            switch step {
-            case 0: introStep
-            case 1: usageStep
-            case 2: wastedStep
-            case 3: limitStep
-            default: introStep
+        ZStack {
+            Color(.systemBackground).ignoresSafeArea()
+            ParticleField(count: 16).ignoresSafeArea().opacity(0.6)
+            VStack {
+                switch step {
+                case 0: introStep
+                case 1: usageStep
+                case 2: wastedStep
+                case 3: limitStep
+                default: introStep
+                }
             }
+            .padding()
         }
-        .padding()
         .navigationTitle("Monk Mode")
     }
 
