@@ -31,6 +31,7 @@
 		D01100A029478B33FDCCE603 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E74F778245365B42B16835 /* SettingsView.swift */; };
 		D4C2C5CF523D51002B3E4E9C /* BlockState.swift in Sources */ = {isa = PBXBuildFile; fileRef = EECFC8BF74A4F89C1E82FF3C /* BlockState.swift */; };
 		D81232DCE2D83C6383522628 /* TrackedAppsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9A9EA092BC6A7761102992 /* TrackedAppsView.swift */; };
+		EC70326E37AD3B3CEFD5015A /* Inconsolata.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A7F284588836E85F065DDB69 /* Inconsolata.ttf */; };
 		F8D5136F4C03628D310586B0 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EA7D572A4D0E1B2CC76E47 /* Notifications.swift */; };
 		F8D55B61F705C92314D93920 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F4243C24A17223D516BC769 /* DashboardView.swift */; };
 /* End PBXBuildFile section */
@@ -80,6 +81,7 @@
 		A3DB21529F5797578EA46593 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A42180873D57C9F21F153162 /* AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIcons.swift; sourceTree = "<group>"; };
 		A56F4FE5FBA1B9521D08686E /* VariantB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantB.swift; sourceTree = "<group>"; };
+		A7F284588836E85F065DDB69 /* Inconsolata.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inconsolata.ttf; sourceTree = "<group>"; };
 		B61ED3EE9EBD86DA136001AD /* MonkCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MonkCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C48FF7F09C2B84C40D5BF9FD /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		CBBD898B5A25D734523F9173 /* MonkApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MonkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +103,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		738430409C63CDF84049B856 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C10192C1174CB5EE512E7FE1 /* Fonts */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		750212DD141285234773B62B /* MonkApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -114,6 +124,7 @@
 				A3DB21529F5797578EA46593 /* Theme.swift */,
 				7B9A9EA092BC6A7761102992 /* TrackedAppsView.swift */,
 				D1D4B2400D392C6ACBE6591C /* Prototype */,
+				738430409C63CDF84049B856 /* Resources */,
 			);
 			path = MonkApp;
 			sourceTree = "<group>";
@@ -154,6 +165,14 @@
 			path = ../Sources/MonkCore;
 			sourceTree = "<group>";
 		};
+		C10192C1174CB5EE512E7FE1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A7F284588836E85F065DDB69 /* Inconsolata.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		D1D4B2400D392C6ACBE6591C /* Prototype */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +194,7 @@
 			buildConfigurationList = 1F23B58E769BD3D3CCF947CD /* Build configuration list for PBXNativeTarget "MonkApp" */;
 			buildPhases = (
 				C4FAEB3E6E591B2E4EBD0DAA /* Sources */,
+				C71B1F3AF45D79D4121338CE /* Resources */,
 				695029C56BE94DF5534158A9 /* Frameworks */,
 				6403C95C13850BF4F8905678 /* Embed Frameworks */,
 			);
@@ -237,6 +257,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C71B1F3AF45D79D4121338CE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EC70326E37AD3B3CEFD5015A /* Inconsolata.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B2459C1C3F9BFD06AA25AF73 /* Sources */ = {

@@ -28,19 +28,20 @@ struct OnboardingView: View {
 
     private var introStep: some View {
         VStack(spacing: 16) {
-            Text("Monk Mode").font(.largeTitle.bold())
-            Text("Live like a monk — strict limits on dopamine intake to reclaim Free Time.")
-                .multilineTextAlignment(.center).foregroundStyle(.secondary)
-            Text(store.privacyCopy).font(.footnote).foregroundStyle(.secondary)
+            Text("MONK MODE").font(.monkDisplay(size: 32)).tracking(2)
+            Text("STRICT LIMITS ON DOPAMINE — RECLAIM FREE TIME.")
+                .font(.monkMono(size: 11)).multilineTextAlignment(.center).foregroundStyle(.secondary).tracking(1)
+            Text(store.privacyCopy).font(.monkMono(size: 9)).foregroundStyle(.secondary).multilineTextAlignment(.center)
             Button("Continue") { step = 1 }
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.borderedProminent).tint(.monkPrimary)
+                .font(.monkMonoBold(size: 13))
         }
     }
 
     private var usageStep: some View {
         VStack(spacing: 12) {
-            Text("How much do you use each app per day?").font(.headline)
-            Text("Slide to set your current daily usage — we'll show the yearly cost next.").font(.caption).foregroundStyle(.secondary)
+            Text("DAILY USAGE // PER APP").font(.monkMonoBold(size: 13)).tracking(1)
+            Text("SLIDE TO SET CURRENT DAILY USAGE").font(.monkMono(size: 9)).foregroundStyle(.secondary).tracking(1)
             ScrollView {
                 VStack(spacing: 14) {
                     ForEach($draft.inputs, id: \.appName) { $input in
@@ -78,8 +79,8 @@ struct OnboardingView: View {
 
     private var wastedStep: some View {
         VStack(spacing: 12) {
-            Text("Your annualized Wasted Time").font(.headline)
-            Text("vs your chosen Limit — excess × 365").font(.caption).foregroundStyle(.secondary)
+            Text("ANNUALIZED WASTED TIME").font(.monkMonoBold(size: 13)).tracking(1)
+            Text("VS CHOSEN LIMIT — EXCESS × 365").font(.monkMono(size: 9)).foregroundStyle(.secondary).tracking(1)
             ForEach(draft.wastedTimeReport(), id: \.appName) { entry in
                 HStack(spacing: 10) {
                     AppIcon.view(for: entry.appName)
@@ -99,8 +100,8 @@ struct OnboardingView: View {
 
     private var limitStep: some View {
         VStack(spacing: 12) {
-            Text("Choose a daily Limit for each app").font(.headline)
-            Text("Or pick a preset — you can fine-tune per app.").font(.caption).foregroundStyle(.secondary)
+            Text("DAILY LIMIT // PER APP").font(.monkMonoBold(size: 13)).tracking(1)
+            Text("PICK A PRESET OR FINE-TUNE PER APP").font(.monkMono(size: 9)).foregroundStyle(.secondary).tracking(1)
             ScrollView {
                 VStack(spacing: 14) {
                     ForEach($draft.inputs, id: \.appName) { $input in

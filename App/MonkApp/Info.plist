@@ -18,6 +18,10 @@
     <true/>
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>Resources/Fonts/Inconsolata.ttf</string>
+    </array>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

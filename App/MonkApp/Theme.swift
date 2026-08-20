@@ -5,6 +5,14 @@ extension Color {
     static let monkPrimary = Color(red: 0.42, green: 0.28, blue: 0.92)
     static let monkPrimaryLight = Color(red: 0.58, green: 0.44, blue: 0.96)
     static let monkAccent = Color(red: 0.72, green: 0.52, blue: 1.0)
+    static let monkGrid = Color.white.opacity(0.06)
+    static let monkHairline = Color.white.opacity(0.12)
+}
+
+extension Font {
+    static func monkDisplay(size: CGFloat) -> Font { .custom("Inconsolata", size: size).weight(.bold) }
+    static func monkMono(size: CGFloat) -> Font { .custom("Inconsolata", size: size) }
+    static func monkMonoBold(size: CGFloat) -> Font { .custom("Inconsolata", size: size).weight(.bold) }
 }
 
 extension Appearance {

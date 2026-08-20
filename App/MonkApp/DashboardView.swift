@@ -32,76 +32,95 @@ struct DashboardView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                hero
-                appsList
-                weekChart
-                privacy
+        ZStack {
+            Color(.systemGroupedBackground).ignoresSafeArea()
+            gridBackground
+            ScrollView {
+                VStack(spacing: 18) {
+                    hero
+                    appsList
+                    weekChart
+                    privacy
+                }
+                .padding()
             }
-            .padding()
         }
-        .background(Color(.systemGroupedBackground))
         .navigationTitle("Monk")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { ToolbarItem(placement: .principal) { Text("MONK").font(.monkMonoBold(size: 14)).tracking(3).foregroundStyle(Color(red: 0.42, green: 0.28, blue: 0.92)) } }
         .onAppear { ticker = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in now = Date() } }
         .onDisappear { ticker?.invalidate() }
+    }
+
+    private var gridBackground: some View {
+        Canvas { ctx, size in
+            let step: CGFloat = 20
+            for x in stride(from: 0, through: size.width, by: step) {
+                ctx.stroke(Path { p in p.move(to: CGPoint(x: x, y: 0)); p.addLine(to: CGPoint(x: x, y: size.height)) }, with: .color(Color.monkGrid), lineWidth: 0.5)
+            }
+            for y in stride(from: 0, through: size.height, by: step) {
+                ctx.stroke(Path { p in p.move(to: CGPoint(x: 0, y: y)); p.addLine(to: CGPoint(x: size.width, y: y)) }, with: .color(Color.monkGrid), lineWidth: 0.5)
+            }
+        }.ignoresSafeArea().opacity(0.5)
     }
 
     private var hero: some View {
         let free = calc.weeklyFreeMinutes
         let vsBase = calc.freeVsBaseline
         let vsLast = calc.freeVsLastWeek
-        return VStack(spacing: 8) {
-            Text("FREE TIME THIS WEEK").font(.caption).foregroundStyle(.secondary).tracking(1)
-            Text(String(format: "%dh %02dm", free/60, free%60))
-                .font(.system(size: 44, weight: .bold, design: .rounded))
-            HStack(spacing: 14) {
-                Label("vs baseline +\(vsBase) min", systemImage: "arrow.up.right")
-                Label("vs last week +\(vsLast) min", systemImage: "arrow.up.forward")
+        return VStack(spacing: 10) {
+            Text("FREE TIME // THIS WEEK").font(.monkMono(size: 10)).foregroundStyle(.secondary).tracking(2)
+            Text(String(format: "%02d:%02d", free/60, free%60))
+                .font(.monkDisplay(size: 52))
+            Rectangle().fill(Color.monkHairline).frame(height: 1).padding(.horizontal, 24)
+            HStack(spacing: 16) {
+                Label("BASELINE +\(vsBase) MIN", systemImage: "arrow.up.right").font(.monkMono(size: 10))
+                Label("LAST WK +\(vsLast) MIN", systemImage: "arrow.up.forward").font(.monkMono(size: 10))
             }
-            .font(.caption).foregroundStyle(.secondary)
+            .foregroundStyle(.secondary)
         }
-        .frame(maxWidth: .infinity).padding(24)
-        .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.06), radius: 16, y: 8)
+        .frame(maxWidth: .infinity).padding(22)
+        .background(Color(.systemBackground).opacity(0.92), in: RoundedRectangle(cornerRadius: 2))
+        .overlay(RoundedRectangle(cornerRadius: 2).stroke(Color.monkHairline, lineWidth: 1))
+        .shadow(color: .black.opacity(0.06), radius: 12, y: 6)
     }
 
     private var appsList: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Today").font(.headline)
+        VStack(alignment: .leading, spacing: 10) {
+            Text("TODAY // TRACKED").font(.monkMono(size: 11)).foregroundStyle(.secondary).tracking(1.5)
             ForEach(state.trackedApps) { app in
                 let usage = demoUsages[app.id]
                 let today = usage?.todayMinutes ?? 0
                 let sess = usage?.currentSessionMinutes ?? 0
                 let remaining = max(0, app.limit.dailyTotalMinutes - today)
                 let block = calc.blockedStates[app.id] ?? .none
-                let isBlocked: Bool = {
-                    if case .none = block { return false }; return true
-                }()
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(app.displayName).font(.subheadline.bold())
-                        Text("\(today)/\(app.limit.dailyTotalMinutes) min · session \(sess)/\(app.limit.singleSessionMinutes)")
-                            .font(.caption).foregroundStyle(.secondary)
+                        Text(app.displayName.uppercased()).font(.monkMonoBold(size: 13)).tracking(0.5)
+                        Text("\(today)/\(app.limit.dailyTotalMinutes) MIN · SESSION \(sess)/\(app.limit.singleSessionMinutes)")
+                            .font(.monkMono(size: 10)).foregroundStyle(.secondary)
                         ProgressView(value: Double(today), total: Double(app.limit.dailyTotalMinutes))
                             .tint(remaining < 6 ? .orange : .monkPrimary)
                     }
                     Spacer()
                     switch block {
                     case .none:
-                        Text("\(remaining)m left").font(.caption2.bold()).padding(6).background(.green.opacity(0.15), in: Capsule())
+                        Text("\(remaining)M LEFT").font(.monkMonoBold(size: 10)).padding(.horizontal, 8).padding(.vertical, 5)
+                            .background(Color.monkPrimary.opacity(0.12), in: RoundedRectangle(cornerRadius: 2))
+                            .overlay(RoundedRectangle(cornerRadius: 2).stroke(Color.monkPrimary.opacity(0.3), lineWidth: 1))
                     case .cooldown(let s):
-                        Text(String(format: "%02d:%02d", s/60, s%60)).font(.caption2.bold()).padding(6).background(.orange.opacity(0.2), in: Capsule())
+                        Text(String(format: "%02d:%02d", s/60, s%60)).font(.monkMonoBold(size: 10)).padding(6)
+                            .background(.orange.opacity(0.16), in: RoundedRectangle(cornerRadius: 2))
                     case .dailyLocked:
-                        Text("LOCKED").font(.caption2.bold()).padding(6).background(.red.opacity(0.15), in: Capsule())
+                        Text("LOCKED").font(.monkMonoBold(size: 10)).padding(6).background(.red.opacity(0.14), in: RoundedRectangle(cornerRadius: 2))
                     }
                 }
                 .padding(12)
-                .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 14))
-                .opacity(isBlocked ? 0.9 : 1)
+                .background(Color(.systemBackground).opacity(0.92), in: RoundedRectangle(cornerRadius: 2))
+                .overlay(RoundedRectangle(cornerRadius: 2).stroke(Color.monkHairline, lineWidth: 1))
             }
             if state.trackedApps.isEmpty {
-                Text("No tracked apps yet — add some in Settings.").font(.caption).foregroundStyle(.secondary)
+                Text("NO TRACKED APPS — ADD IN SETTINGS").font(.monkMono(size: 10)).foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .center).padding()
             }
         }
@@ -109,20 +128,20 @@ struct DashboardView: View {
 
     private var weekChart: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Last 7 days").font(.headline)
+            Text("LAST 7 DAYS").font(.monkMono(size: 11)).foregroundStyle(.secondary).tracking(1)
             Chart(calc.last7Days, id: \.date) { d in
                 BarMark(x: .value("day", d.date, unit: .day), y: .value("min", d.minutes))
-                    .foregroundStyle(Color.monkPrimary.gradient).cornerRadius(4)
-            }.frame(height: 120)
-            Text("Local-only · \(MonkStore(fileURL: MonkStore.defaultStoreURL()).privacyCopy)")
-                .font(.caption2).foregroundStyle(.secondary)
+                    .foregroundStyle(Color(red: 0.42, green: 0.28, blue: 0.92).gradient).cornerRadius(2)
+            }.frame(height: 110)
+            Text("LOCAL-ONLY · \(MonkStore(fileURL: MonkStore.defaultStoreURL()).privacyCopy)")
+                .font(.monkMono(size: 9)).foregroundStyle(.secondary)
         }
-        .padding(14).background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 14))
-        .shadow(color: .black.opacity(0.04), radius: 8, y: 4)
+        .padding(14).background(Color(.systemBackground).opacity(0.92), in: RoundedRectangle(cornerRadius: 2))
+        .overlay(RoundedRectangle(cornerRadius: 2).stroke(Color.monkHairline, lineWidth: 1))
     }
 
     private var privacy: some View {
-        Text("All data is stored locally on-device. No account, no cloud.")
-            .font(.caption2).foregroundStyle(.secondary).multilineTextAlignment(.center)
+        Text("// ALL DATA ON-DEVICE · NO ACCOUNT · NO CLOUD")
+            .font(.monkMono(size: 9)).foregroundStyle(.secondary).multilineTextAlignment(.center)
     }
 }
