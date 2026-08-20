@@ -5,6 +5,7 @@ struct OnboardingView: View {
     @Binding var state: MonkState
     private let store: MonkStore
     @State private var step = 0
+    @State private var showWelcome = true
     @State private var draft = OnboardingDraft(inputs: MonkState.defaultTrackedAppNames.map { OnboardingInput(appName: $0, dailyUsageMinutes: 30, preset: .standard) })
 
     init(state: Binding<MonkState>) {
@@ -13,32 +14,25 @@ struct OnboardingView: View {
     }
 
     var body: some View {
-        ZStack {
-            Color(.systemBackground).ignoresSafeArea()
-            ParticleField(count: 16).ignoresSafeArea().opacity(0.6)
-            VStack {
-                switch step {
-                case 0: introStep
-                case 1: usageStep
-                case 2: wastedStep
-                case 3: limitStep
-                default: introStep
+        Group {
+            if showWelcome {
+                WelcomeView { withAnimation { showWelcome = false } }
+            } else {
+                ZStack {
+                    Color(.systemBackground).ignoresSafeArea()
+                    ParticleField(count: 16).ignoresSafeArea().opacity(0.6)
+                    VStack {
+                        switch step {
+                        case 0: usageStep
+                        case 1: wastedStep
+                        case 2: limitStep
+                        default: usageStep
+                        }
+                    }
+                    .padding()
                 }
+                .navigationTitle("Monk Mode")
             }
-            .padding()
-        }
-        .navigationTitle("Monk Mode")
-    }
-
-    private var introStep: some View {
-        VStack(spacing: 16) {
-            Text("MONK MODE").font(.monkDisplay(size: 32)).tracking(2)
-            Text("STRICT LIMITS ON DOPAMINE — RECLAIM FREE TIME.")
-                .font(.monkMono(size: 11)).multilineTextAlignment(.center).foregroundStyle(.secondary).tracking(1)
-            Text(store.privacyCopy).font(.monkMono(size: 9)).foregroundStyle(.secondary).multilineTextAlignment(.center)
-            Button("Continue") { step = 1 }
-                .buttonStyle(.borderedProminent).tint(.monkPrimary)
-                .font(.monkMonoBold(size: 13))
         }
     }
 

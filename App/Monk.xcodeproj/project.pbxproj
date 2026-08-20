@@ -13,6 +13,7 @@
 		1E5A34F5725480F9F5D37BEB /* TrackedAppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E791E14E4A2DB58E691C8A9 /* TrackedAppManager.swift */; };
 		232778206C0FD36BE5A3431A /* AppIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42180873D57C9F21F153162 /* AppIcons.swift */; };
 		24340FC022CDDC6F06411C9F /* VariantC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D6DDAA48B3C18245CC944C4 /* VariantC.swift */; };
+		30FC53C4F7FBC8D55BFEBFC6 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 689153E0996E105560FB116A /* WelcomeView.swift */; };
 		327F6C737BCF111B293E0A65 /* UsageTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69462FB48D5421B39EC725E /* UsageTracking.swift */; };
 		370C0EA8E1A34169516AB061 /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48FF7F09C2B84C40D5BF9FD /* Onboarding.swift */; };
 		4274C687D8C20DE2E73A60C7 /* MonkStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857583F4A7249AD4CB270078 /* MonkStore.swift */; };
@@ -68,6 +69,7 @@
 		4C88959A8F589596B81DCFA0 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		56144626C7D5D8A5CE036B1F /* PrototypeSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeSwitcher.swift; sourceTree = "<group>"; };
 		68556655B538DECFC7EECAD3 /* MonkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonkApp.swift; sourceTree = "<group>"; };
+		689153E0996E105560FB116A /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		6F1A853F71EE6B8E6045CE58 /* PrototypeDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeDashboardView.swift; sourceTree = "<group>"; };
 		6F4243C24A17223D516BC769 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		711C770B28907ACB0A029CF3 /* DemoState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoState.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				F0E74F778245365B42B16835 /* SettingsView.swift */,
 				A3DB21529F5797578EA46593 /* Theme.swift */,
 				7B9A9EA092BC6A7761102992 /* TrackedAppsView.swift */,
+				689153E0996E105560FB116A /* WelcomeView.swift */,
 				D1D4B2400D392C6ACBE6591C /* Prototype */,
 				738430409C63CDF84049B856 /* Resources */,
 			);
@@ -305,6 +308,7 @@
 				132254A0D32C2252D757A45D /* VariantA.swift in Sources */,
 				5BDAC0B6920FD0213BF7760A /* VariantB.swift in Sources */,
 				24340FC022CDDC6F06411C9F /* VariantC.swift in Sources */,
+				30FC53C4F7FBC8D55BFEBFC6 /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
